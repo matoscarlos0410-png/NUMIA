@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>NUMIA - Tu asistente personal</title>
+
+  <meta
+    name="description"
+    content="NUMIA, tu asistente personal educativo para todos los cursos."
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #263d91, transparent 35%),
+        radial-gradient(circle at bottom right, #17245f, transparent 35%),
+        #080d25;
+      color: white;
+      padding: 20px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1150px;
+      margin: auto;
+    }
+
+    /* HEADER */
+
+    header {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(15px);
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-icon {
+      width: 65px;
+      height: 65px;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 35px;
+      background: linear-gradient(135deg, #3b82f6, #7c3aed);
+      box-shadow: 0 0 30px rgba(59,130,246,0.5);
+    }
+
+    .logo h1 {
+      font-size: 34px;
+      letter-spacing: 2px;
+    }
+
+    .logo p {
+      color: #b8c5ff;
+      margin-top: 5px;
+    }
+
+    /* GRID */
+
+    .layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 20px;
+    }
+
+    .panel,
+    .chat {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(15px);
+      border-radius: 25px;
+      padding: 22px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+    }
+
+    /* SIDEBAR */
+
+    .section {
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      color: #9fb0ff;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.2);
+      color: white;
+      border-radius: 14px;
+      outline: none;
+      padding: 13px;
+      font-size: 15px;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #4f8cff;
+      box-shadow: 0 0 15px rgba(79,140,255,0.2);
+    }
+
+    .subject-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      color: white;
+      border-radius: 12px;
+      padding: 11px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    .subject-btn,
+    .level-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .subject-btn.active,
+    .level-btn.active {
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      box-shadow: 0 5px 20px rgba(59,130,246,0.25);
+    }
+
+    .level-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    /* CHAT */
+
+    .welcome {
+      background: linear-gradient(
+        135deg,
+        rgba(37,99,235,0.25),
+        rgba(124,58,237,0.2)
+      );
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+
+    .welcome h2 {
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      color: #cbd5ff;
+      line-height: 1.6;
+    }
+
+    .examples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .example {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 13px;
+    }
+
+    textarea {
+      min-height: 145px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .ask {
+      flex: 1;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      font-size: 16px;
+      padding: 15px;
+    }
+
+    .clear {
+      background: rgba(255,255,255,0.08);
+      padding: 15px 20px;
+    }
+
+    /* ANSWER */
+
+    .answer-box {
+      margin-top: 20px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 20px;
+      min-height: 150px;
+    }
+
+    .answer-title {
+      color: #8eb4ff;
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+
+    .answer {
+      white-space: pre-wrap;
+      line-height: 1.7;
+      color: #f1f5ff;
+    }
+
+    .loading {
+      display: none;
+      color: #a9bbff;
+      padding: 10px 0;
+    }
+
+    /* HISTORY */
+
+    .history {
+      margin-top: 20px;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .history-item {
+      background: rgba(255,255,255,0.06);
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .history-item:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .history-question {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .history-date {
+      font-size: 11px;
+      color: #9aa8d7;
+      margin-top: 5px;
+    }
+
+    .delete-history {
+      background: transparent;
+      color: #ff9b9b;
+      padding: 5px;
+      font-size: 12px;
+    }
+
+    footer {
+      text-align: center;
+      color: #8794bd;
+      padding: 25px 0 10px;
+      font-size: 13px;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 850px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .subject-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 550px) {
+      body {
+        padding: 10px;
+      }
+
+      .logo h1 {
+        font-size: 27px;
+      }
+
+      .layout {
+        gap: 12px;
+      }
+
+      .panel,
+      .chat,
+      header {
+        border-radius: 18px;
+        padding: 16px;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .subject-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header>
+    <div class="logo">
+      <div class="logo-icon">🤖</div>
+
+      <div>
+        <h1>NUMIA</h1>
+        <p>Tu asistente personal para todos los cursos</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="panel">
+
+      <div class="section">
+        <div class="section-title">👤 Estudiante</div>
+
+        <input
+          id="userName"
+          type="text"
+          placeholder="Escribe tu nombre"
+          maxlength="40"
+        >
+      </div>
+
+      <div class="section">
+
+        <div class="section-title">📚 Materia</div>
+
+        <div class="subject-grid">
+
+          <button class="subject-btn active" data-subject="Automático">
+            🤖 Automático
+          </button>
+
+          <button class="subject-btn" data-subject="Matemáticas">
+            📐 Matemáticas
+          </button>
+
+          <button class="subject-btn" data-subject="Comunicación">
+            📖 Comunicación
+          </button>
+
+          <button class="subject-btn" data-subject="Ciencia y Tecnología">
+            🔬 Ciencia
+          </button>
+
+          <button class="subject-btn" data-subject="Ciencias Sociales">
+            🌎 Sociales
+          </button>
+
+          <button class="subject-btn" data-subject="DPCC">
+            ⚖️ DPCC
+          </button>
+
+          <button class="subject-btn" data-subject="Inglés">
+            🇬🇧 Inglés
+          </button>
+
+          <button class="subject-btn" data-subject="Arte y Cultura">
+            🎨 Arte
+          </button>
+
+          <button class="subject-btn" data-subject="Educación Física">
+            🏃 Educación Física
+          </button>
+
+          <button class="subject-btn" data-subject="Tecnología">
+            💻 Tecnología
+          </button>
+
+          <button class="subject-btn" data-subject="Filosofía">
+            🧠 Filosofía
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="section">
+
+        <div class="section-title">🎯 Nivel</div>
+
+        <div class="level-list">
+
+          <button class="level-btn" data-level="Principiante">
+            🌱 Principiante
+          </button>
+
+          <button class="level-btn active" data-level="Básico">
+            📘 Básico
+          </button>
+
+          <button class="level-btn" data-level="Intermedio">
+            🚀 Intermedio
+          </button>
+
+          <button class="level-btn" data-level="Avanzado">
+            🧠 Avanzado
+          </button>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+    <!-- CHAT -->
+
+    <main class="chat">
+
+      <div class="welcome">
+
+        <h2 id="welcomeTitle">
+          ¡Hola! 👋 Soy NUMIA
+        </h2>
+
+        <p>
+          Pregúntame sobre matemáticas, comunicación,
+          ciencia, historia, geografía, inglés, tecnología
+          y muchos otros cursos.
+        </p>
+
+      </div>
+
+      <div class="section-title">
+        💡 Ejemplos
+      </div>
+
+      <div class="examples">
+
+        <button class="example"
+          data-question="Explícame el teorema de Pitágoras con un ejemplo">
+          📐 Pitágoras
+        </button>
+
+        <button class="example"
+          data-question="Resuelve 3x + 7 = 25 paso a paso">
+          ➗ Ecuación
+        </button>
+
+        <button class="example"
+          data-question="Explícame la fotosíntesis de forma sencilla">
+          🌱 Fotosíntesis
+        </button>
+
+        <button class="example"
+          data-question="Explícame la independencia del Perú">
+          🇵🇪 Historia
+        </button>
+
+        <button class="example"
+          data-question="¿Qué es la ciudadanía y por qué es importante?">
+          ⚖️ Ciudadanía
+        </button>
+
+        <button class="example"
+          data-question="Translate this sentence into English: Mi colegio es grande">
+          🇬🇧 Inglés
+        </button>
+
+      </div>
+
+      <textarea
+        id="question"
+        placeholder="Escribe tu pregunta aquí..."
+        maxlength="5000"
+      ></textarea>
+
+      <div class="actions">
+
+        <button class="ask" id="askButton">
+          🚀 Preguntar a NUMIA
+        </button>
+
+        <button class="clear" id="clearButton">
+          🗑️ Limpiar
+        </button>
+
+      </div>
+
+      <div class="loading" id="loading">
+        🤖 NUMIA está pensando...
+      </div>
+
+      <div class="answer-box">
+
+        <div class="answer-title">
+          💬 Respuesta de NUMIA
+        </div>
+
+        <div class="answer" id="answer">
+          Aquí aparecerá la respuesta.
+        </div>
+
+      </div>
+
+      <div class="history">
+
+        <div class="history-header">
+
+          <strong>🕘 Historial</strong>
+
+          <button
+            class="delete-history"
+            id="deleteHistory"
+          >
+            Borrar historial
+          </button>
+
+        </div>
+
+        <div id="historyList"></div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <footer>
+    NUMIA © 2026 — Asistente educativo
+  </footer>
+
+</div>
+
+<script>
+
+  const userName = document.getElementById("userName");
+  const question = document.getElementById("question");
+  const answer = document.getElementById("answer");
+  const askButton = document.getElementById("askButton");
+  const clearButton = document.getElementById("clearButton");
+  const loading = document.getElementById("loading");
+  const welcomeTitle = document.getElementById("welcomeTitle");
+  const historyList = document.getElementById("historyList");
+  const deleteHistory = document.getElementById("deleteHistory");
+
+  let selectedSubject =
+    localStorage.getItem("numia_subject") || "Automático";
+
+  let selectedLevel =
+    localStorage.getItem("numia_level") || "Básico";
+
+  let history =
+    JSON.parse(localStorage.getItem("numia_history") || "[]");
+
+  userName.value =
+    localStorage.getItem("numia_name") || "";
+
+  function updateGreeting() {
+
+    const name = userName.value.trim();
+
+    if (name) {
+      welcomeTitle.textContent =
+        `¡Hola ${name}! 👋 Soy NUMIA`;
+    } else {
+      welcomeTitle.textContent =
+        "¡Hola! 👋 Soy NUMIA";
+    }
+  }
+
+  userName.addEventListener("input", () => {
+
+    localStorage.setItem(
+      "numia_name",
+      userName.value
+    );
+
+    updateGreeting();
+
+  });
+
+  function updateButtons() {
+
+    document.querySelectorAll(".subject-btn")
+      .forEach(button => {
+
+        button.classList.toggle(
+          "active",
+          button.dataset.subject === selectedSubject
+        );
+
+      });
+
+    document.querySelectorAll(".level-btn")
+      .forEach(button => {
+
+        button.classList.toggle(
+          "active",
+          button.dataset.level === selectedLevel
+        );
+
+      });
+  }
+
+  document.querySelectorAll(".subject-btn")
+    .forEach(button => {
+
+      button.addEventListener("click", () => {
+
+        selectedSubject =
+          button.dataset.subject;
+
+        localStorage.setItem(
+          "numia_subject",
+          selectedSubject
+        );
+
+        updateButtons();
+
+      });
+
+    });
+
+  document.querySelectorAll(".level-btn")
+    .forEach(button => {
+
+      button.addEventListener("click", () => {
+
+        selectedLevel =
+          button.dataset.level;
+
+        localStorage.setItem(
+          "numia_level",
+          selectedLevel
+        );
+
+        updateButtons();
+
+      });
+
+    });
+
+  document.querySelectorAll(".example")
+    .forEach(button => {
+
+      button.addEventListener("click", () => {
+
+        question.value =
+          button.dataset.question;
+
+        question.focus();
+
+      });
+
+    });
+
+  function escapeHTML(text) {
+
+    return text
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  }
+
+  function renderHistory() {
+
+    if (!history.length) {
+
+      historyList.innerHTML =
+        '<p style="color:#8794bd;font-size:13px;">Todavía no hay preguntas.</p>';
+
+      return;
+
+    }
+
+    historyList.innerHTML =
+      history
+        .slice()
+        .reverse()
+        .slice(0, 15)
+        .map((item, index) => {
+
+          return `
+            <div
+              class="history-item"
+              data-index="${index}"
+            >
+              <div class="history-question">
+                ${escapeHTML(item.question)}
+              </div>
+
+              <div class="history-date">
+                ${escapeHTML(item.date)}
+              </div>
+            </div>
+          `;
+
+        })
+        .join("");
+
+    document.querySelectorAll(".history-item")
+      .forEach((element, visibleIndex) => {
+
+        element.addEventListener("click", () => {
+
+          const reversed =
+            history.slice().reverse();
+
+          const item =
+            reversed[visibleIndex];
+
+          if (!item) return;
+
+          question.value =
+            item.question;
+
+          answer.textContent =
+            item.answer;
+
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+
+        });
+
+      });
+
+  }
+
+  function saveHistory(questionText, answerText) {
+
+    history.push({
+
+      question: questionText,
+
+      answer: answerText,
+
+      date: new Date().toLocaleString("es-PE")
+
+    });
+
+    history =
+      history.slice(-30);
+
+    localStorage.setItem(
+      "numia_history",
+      JSON.stringify(history)
+    );
+
+    renderHistory();
+
+  }
+
+  async function askNumia() {
+
+    const text =
+      question.value.trim();
+
+    if (!text) {
+
+      answer.textContent =
+        "Escribe una pregunta primero.";
+
+      question.focus();
+
+      return;
+
+    }
+
+    askButton.disabled = true;
+    loading.style.display = "block";
+
+    answer.textContent =
+      "NUMIA está preparando tu respuesta...";
+
+    try {
+
+      const response =
+        await fetch("/api/chat", {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+
+            message: text,
+
+            level: selectedLevel,
+
+            subject: selectedSubject,
+
+            userName:
+              userName.value.trim()
+
+          })
+
+        });
+
+      const data =
+        await response.json();
+
+      if (!response.ok || !data.success) {
+
+        throw new Error(
+          data.error ||
+          "No se pudo obtener una respuesta."
+        );
+
+      }
+
+      answer.textContent =
+        data.answer;
+
+      saveHistory(
+        text,
+        data.answer
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      answer.textContent =
+        "❌ No pude conectarme con NUMIA. " +
+        "Comprueba que la aplicación esté publicada correctamente " +
+        "y que la variable OPENAI_API_KEY esté configurada.";
+
+    } finally {
+
+      askButton.disabled = false;
+      loading.style.display = "none";
+
+    }
+
+  }
+
+  askButton.addEventListener(
+    "click",
+    askNumia
+  );
+
+  question.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Enter" &&
+        (event.ctrlKey || event.metaKey)
+      ) {
+
+        askNumia();
+
+      }
+
+    }
+  );
+
+  clearButton.addEventListener(
+    "click",
+    () => {
+
+      question.value = "";
+
+      answer.textContent =
+        "Aquí aparecerá la respuesta.";
+
+      question.focus();
+
+    }
+  );
+
+  deleteHistory.addEventListener(
+    "click",
+    () => {
+
+      if (!history.length) return;
+
+      history = [];
+
+      localStorage.removeItem(
+        "numia_history"
+      );
+
+      renderHistory();
+
+    }
+  );
+
+  updateGreeting();
+  updateButtons();
+  renderHistory();
+
+</script>
+
+</body>
+</html>
