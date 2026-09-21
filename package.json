@@ -1,0 +1,9 @@
+{
+  "name": "numia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NUMIA - Tu asistente personal para todos los cursos",
+  "dependencies": {
+    "openai": "^5.0.0"
+  }
+}
